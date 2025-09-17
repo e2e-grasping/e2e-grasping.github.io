@@ -17,11 +17,11 @@
 			<h1 class="site-title">Scaling End-to-End Grasping</h1>
 			<p class="site-subtitle">Disaggregated Simulation for Vision-based RL</p>
 			<ul class="authors">
-				<li>Under Submission</li>
+				<li>Author Names Here</li>
 			</ul>
-			<!-- <p class="affiliations">Affiliations • Institution • Lab</p> -->
+			<p class="affiliations">Affiliations • Institution • Lab</p>
 			<div class="links">
-				<!-- <a class="btn" href="https://e2e-grasping.github.io/" target="_blank" rel="noopener">Project Page</a> -->
+				<a class="btn" href="https://e2e-grasping.github.io/" target="_blank" rel="noopener">Project Page</a>
 				<a class="btn" href="#videos">Videos</a>
 				<a class="btn" href="#method">Method</a>
 			</div>
@@ -33,7 +33,7 @@
 			<div class="container narrow">
 				<h2>Abstract</h2>
 				<p>
-					This work explores techniques to scale up image-based end-to-end learning for dexterous grasping with an arm + hand system. Unlike state-based RL, vision-based RL is much more memory inefficient, resulting in relatively low batch sizes, which is not amenable for algorithms like PPO. Nevertheless, it is still an attractive method as unlike the more commonly used techniques which distill state-based policies into vision networks, end-to-end RL can allow for emergent active vision behaviors. We identify a key bottleneck in training these policies is the way most existing simulators scale to multiple GPUs using traditional data parallelism techniques. We propose a new method where we disaggregate the simulator and RL (both training and experience buffers) onto separate GPUs. On a node with four GPUs, we have the simulator running on three of them, and PPO running on the fourth. We are able to show that with the same number of GPUs, we can double the number of existing environments compared to the previous baseline of standard data parallelism. This allows us to train vision-based environments, end-to-end with depth, which were previously performing far worse with the baseline. We train and distill both depth and state-based policies into stereo RGB networks and show that depth distillation leads to better results, both in simulation and reality. This improvement is likely due to the observability gap between state and vision policies which does not exist when distilling depth policies into stereo RGB. We further show that the increased batch size brought about by disaggregated simulation also improves real world performance. When deploying in the real world, we improve upon the previous state-of-the-art vision-based results using our end-to-end policies.
+					This work explores techniques to scale up image-based end-to-end learning for dexterous grasping with an arm + hand system. Unlike state-based RL, vision-based RL is much more memory inefficient, resulting in relatively low batch sizes, which is not amenable for algorithms like PPO. Nevertheless, it is still an attractive method as unlike the more commonly used techniques which distill state-based policies into vision networks, end-to-end RL can allow for emergent active vision behaviors. We identify a key bottleneck in training these policies is the way most existing simulators scale to multiple GPUs using traditional data parallelism techniques. We propose a new method where we disaggregate the simulator and RL (both training and experience buffers) onto separate GPUs. On a node with four GPUs, we have the simulator running on three of them, and PPO running on the fourth. We are able to show that with the same number of GPUs, we can double the number of existing environments compared to the previous baseline of standard data parallelism. This allows us to train vision-based environments, end-to-end with depth, which were previously performing far worse with the baseline. We train and distill both depth and state-based policies into stereo RGB networks and show that depth distillation leads to better results, both in simulation and reality. This improvement is likely due to the observability gap between state and vision policies which does not exist when distilling depth policies into stereo RGB. We further show that the increased batch size brought about by disaggregated simulation also improves real world performance. When deploying in the real world, we improve upon the previous state-of-the-art vision-based results using our end-to-end policies. More information can be found at <a href="https://e2e-grasping.github.io/" target="_blank" rel="noopener">https://e2e-grasping.github.io/</a>.
 				</p>
 			</div>
 		</section>
@@ -68,27 +68,157 @@
 				</div>
 				<div class="method-diagrams">
 					<svg class="method-svg" id="svg-data-parallel" viewBox="0 0 1000 300" aria-label="Data Parallelism diagram"></svg>
-					<svg class="method-svg" id="svg-disaggregated" viewBox="0 0 1000 300" aria-label="Disaggregated Simulation diagram" hidden></svg>
+					<svg class="method-svg" id="svg-disaggregated" viewBox="0 0 1000 300" aria-label="Disaggregated Simulation diagram"></svg>
 				</div>
 			</div>
 		</section>
 
-		<!-- <section id="citation" class="section">
-			<div class="container narrow">
-				<h2>Citation</h2>
-				<pre class="code"><code>@article{e2e_grasping_2025,
-  title={Scaling End-to-End Grasping with Disaggregated Simulation},
-  author={Author, A. and Collaborator, B. and Collaborator, C.},
-  year={2025},
-  journal={arXiv preprint arXiv:xxxx.xxxxx}
-}</code></pre>
+		<section id="results" class="section section-alt">
+			<div class="container">
+				<h2>Results</h2>
+				<p class="muted">We evaluate scaling capacity and policy quality in both simulation and the real world.</p>
+
+				<div class="results-grid">
+					<article class="result-card">
+						<header class="result-head">
+							<h3>Scaling capacity on a 4×GPU node</h3>
+							<p class="muted">Maximum concurrent environments at different input resolutions.</p>
+						</header>
+						<div class="result-body">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Input resolution</th>
+										<th>Data Parallel</th>
+										<th>Disaggregated Simulation</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>160×120</td>
+										<td><div class="subcell">1024 / GPU</div><div class="subcell muted">(4096 total)</div></td>
+										<td class="cell-best"><div class="subcell">2800 / GPU</div><div class="subcell muted">(8400 total)</div></td>
+									</tr>
+									<tr>
+										<td>320×240</td>
+										<td><div class="subcell">256 / GPU</div><div class="subcell muted">(1024 total)</div></td>
+										<td class="cell-best"><div class="subcell">700 / GPU</div><div class="subcell muted">(2100 total)</div></td>
+									</tr>
+								</tbody>
+							</table>
+							<p class="footnote muted">4×“sim + RL”; 3×simulators + 1×learner.</p>
+						</div>
+					</article>
+
+					<article class="result-card">
+						<header class="result-head">
+							<h3>Simulation progress and success</h3>
+							<p class="muted">DP vs Disaggregated at 160×120 and 320×240 (5 seeds avg).</p>
+						</header>
+						<div class="result-body">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Res.</th>
+										<th>Method</th>
+										<th>ADR Inc. ↑</th>
+										<th>% Full ADR ↑</th>
+										<th>SR ↑</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td rowspan="2">160×120</td>
+										<td>DP</td>
+										<td>0.38</td>
+										<td>20%</td>
+										<td>0.37</td>
+									</tr>
+									<tr>
+										<td class="method-disagg">Disagg</td>
+										<td class="cell-best">1.00</td>
+										<td class="cell-best">100%</td>
+										<td class="cell-best">0.42</td>
+									</tr>
+									<tr>
+										<td rowspan="2">320×240</td>
+										<td>DP</td>
+										<td>0.00</td>
+										<td>0%</td>
+										<td>0.00</td>
+									</tr>
+									<tr>
+										<td class="method-disagg">Disagg</td>
+										<td class="cell-best">0.90</td>
+										<td class="cell-best">20%</td>
+										<td class="cell-best">0.35</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</article>
+
+					<!-- Inserted plot card as third item (bottom-left) -->
+					<article class="result-card">
+						<header class="result-head">
+							<h3>Depth vs State teachers (simulation)</h3>
+							<p class="muted">Distillation performance between depth and state teachers.</p>
+						</header>
+						<div class="result-body">
+							<img id="chart-sim-depth-vs-state"
+								class="result-chart"
+								alt="Depth vs State teachers chart"
+								data-src="assets/img/sim_depth_vs_state.png" />
+						</div>
+					</article>
+
+					<article class="result-card">
+						<header class="result-head">
+							<h3>Real-world success rates</h3>
+							<p class="muted">Depth teachers lead to better results; disagg further improves performance.</p>
+						</header>
+						<div class="result-body">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Model</th>
+										<th>Success Rate ↑</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>DextrAH-G (state teacher)</td>
+										<td>87%</td>
+									</tr>
+									<tr>
+										<td>DextrAH-RGB (state teacher)</td>
+										<td>77%</td>
+									</tr>
+									<tr>
+										<td>Ours (depth teacher)</td>
+										<td>87%</td>
+									</tr>
+									<tr>
+										<td>Ours (depth teacher, disagg)</td>
+										<td class="cell-best">93%</td>
+									</tr>
+								</tbody>
+							</table>
+							<p class="footnote muted">SR = success rate.</p>
+						</div>
+					</article>
+				</div>
+
+				<!-- Plot card moved above into the grid; standalone removed -->
 			</div>
-		</section> -->
+		</section>
+
+		
 	</main>
 
 	<footer class="site-footer">
 		<div class="container">
-			<!-- <p>© 2025 The Authors. Website template for academic projects.</p> -->
+			
 		</div>
 	</footer>
 
