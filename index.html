@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>End-to-End Grasping with Disaggregated Simulation</title>
+	<meta name="description" content="Scaling image-based end-to-end learning for dexterous grasping with disaggregated simulation and PPO.">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+	<header class="site-header">
+		<div class="container">
+			<h1 class="site-title">Scaling End-to-End Grasping</h1>
+			<p class="site-subtitle">Disaggregated Simulation for Vision-based RL</p>
+			<ul class="authors">
+				<li>Author Names Here</li>
+			</ul>
+			<p class="affiliations">Affiliations • Institution • Lab</p>
+			<div class="links">
+				<a class="btn" href="https://e2e-grasping.github.io/" target="_blank" rel="noopener">Project Page</a>
+				<a class="btn" href="#videos">Videos</a>
+				<a class="btn" href="#method">Method</a>
+			</div>
+		</div>
+	</header>
+
+	<main>
+		<section id="abstract" class="section">
+			<div class="container narrow">
+				<h2>Abstract</h2>
+				<p>
+					This work explores techniques to scale up image-based end-to-end learning for dexterous grasping with an arm + hand system. Unlike state-based RL, vision-based RL is much more memory inefficient, resulting in relatively low batch sizes, which is not amenable for algorithms like PPO. Nevertheless, it is still an attractive method as unlike the more commonly used techniques which distill state-based policies into vision networks, end-to-end RL can allow for emergent active vision behaviors. We identify a key bottleneck in training these policies is the way most existing simulators scale to multiple GPUs using traditional data parallelism techniques. We propose a new method where we disaggregate the simulator and RL (both training and experience buffers) onto separate GPUs. On a node with four GPUs, we have the simulator running on three of them, and PPO running on the fourth. We are able to show that with the same number of GPUs, we can double the number of existing environments compared to the previous baseline of standard data parallelism. This allows us to train vision-based environments, end-to-end with depth, which were previously performing far worse with the baseline. We train and distill both depth and state-based policies into stereo RGB networks and show that depth distillation leads to better results, both in simulation and reality. This improvement is likely due to the observability gap between state and vision policies which does not exist when distilling depth policies into stereo RGB. We further show that the increased batch size brought about by disaggregated simulation also improves real world performance. When deploying in the real world, we improve upon the previous state-of-the-art vision-based results using our end-to-end policies. More information can be found at <a href="https://e2e-grasping.github.io/" target="_blank" rel="noopener">https://e2e-grasping.github.io/</a>.
+				</p>
+			</div>
+		</section>
+
+		<section id="videos" class="section section-alt">
+			<div class="container">
+				<h2>Videos</h2>
+				<div class="gallery">
+					<a class="card" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-video-type="youtube" aria-label="Demo 1">
+						<img src="assets/img/thumb-1.svg" alt="Video thumbnail 1">
+						<div class="card-caption">Simulation Scaling Demo</div>
+					</a>
+					<a class="card" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-video-type="youtube" aria-label="Demo 2">
+						<img src="assets/img/thumb-2.svg" alt="Video thumbnail 2">
+						<div class="card-caption">Depth Distillation Results</div>
+					</a>
+					<a class="card" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-video-type="youtube" aria-label="Demo 3">
+						<img src="assets/img/thumb-3.svg" alt="Video thumbnail 3">
+						<div class="card-caption">Real-world Grasping</div>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<section id="method" class="section">
+			<div class="container">
+				<h2>Method: Disaggregated Simulation vs Data Parallelism</h2>
+				<p class="muted">Animated diagrams illustrating the data flow across 4 GPUs for both approaches (horizon length = 3).</p>
+				<div class="method-controls">
+					<button class="btn" data-mode="data-parallel">Data Parallelism</button>
+					<button class="btn" data-mode="disaggregated">Disaggregated Simulation</button>
+				</div>
+				<div class="method-diagrams">
+					<svg class="method-svg" id="svg-data-parallel" viewBox="0 0 1000 380" aria-label="Data Parallelism diagram"></svg>
+					<svg class="method-svg" id="svg-disaggregated" viewBox="0 0 1000 380" aria-label="Disaggregated Simulation diagram" hidden></svg>
+				</div>
+			</div>
+		</section>
+
+		<section id="citation" class="section">
+			<div class="container narrow">
+				<h2>Citation</h2>
+				<pre class="code"><code>@article{e2e_grasping_2025,
+  title={Scaling End-to-End Grasping with Disaggregated Simulation},
+  author={Author, A. and Collaborator, B. and Collaborator, C.},
+  year={2025},
+  journal={arXiv preprint arXiv:xxxx.xxxxx}
+}</code></pre>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">
+			<p>© 2025 The Authors. Website template for academic projects.</p>
+		</div>
+	</footer>
+
+	<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Video dialog">
+		<div class="lightbox-backdrop" data-close></div>
+		<div class="lightbox-content" role="document">
+			<button class="lightbox-close" aria-label="Close video" data-close>&times;</button>
+			<div class="lightbox-body" id="lightbox-body"></div>
+		</div>
+	</div>
+
+	<script src="assets/js/main.js"></script>
+</body>
+</html> 
