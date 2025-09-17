@@ -44,6 +44,8 @@
 	const DP_COLORS = { sim: '#d5d1f6', rlbuf: '#d7f3df', net: '#f9e5d1', border: '#e5e7eb', packet: '#334155', allreduce: '#e879f9' };
 	function createSvgEl(s, name, attrs) { const ns = 'http://www.w3.org/2000/svg'; const el = document.createElementNS(ns, name); for (const k in attrs) el.setAttribute(k, attrs[k]); s.appendChild(el); return el; }
 	function addLabel(s, x, y, text) { return createSvgEl(s, 'text', { x: x, y: y, fill: '#334155', 'font-size': '13', 'font-family': 'Inter, system-ui' }).appendChild(document.createTextNode(text)), s.lastChild; }
+	function addCenteredLabel(s, cx, cy, text) { const t = createSvgEl(s, 'text', { x: cx, y: cy, fill: '#334155', 'font-size': '13', 'font-family': 'Inter, system-ui', 'text-anchor': 'middle', 'dominant-baseline': 'middle' }); t.textContent = text; return t; }
+
 	function animatePacket(s, x1, y1, x2, y2, durationMs, delayMs, color, token) {
 		const c = createSvgEl(s, 'circle', { cx: x1, cy: y1, r: 5, fill: color || DP_COLORS.packet, opacity: 0.95 });
 		const start = performance.now() + (delayMs||0);
@@ -60,10 +62,10 @@
 
 	function drawDataParallel(svg, token, animate) {
 		const s = svg; s.innerHTML = '';
-		const pad = 40; const gpuW = 220, gpuH = 110, gap = 24; const y = 200;
+		const pad = 40; const gpuW = 220, gpuH = 110, gap = 24; const y = 100;
 		function rect(x, y, w, h, fill) { return createSvgEl(s, 'rect', { x:x, y:y, width:w, height:h, rx:10, fill: fill, stroke: DP_COLORS.border, 'stroke-width': 1 }); }
 		const x0 = pad, x1 = x0 + gpuW + gap, x2 = x1 + gpuW + gap, x3 = x2 + gpuW + gap;
-		const replicas = [x0, x1, x2, x3].map((x, i) => { rect(x, y, gpuW, gpuH, '#ffffff'); rect(x+16, y+10, 188, 28, DP_COLORS.sim); addLabel(s, x+24, y+28, 'Environment'); rect(x+16, y+44, 188, 26, DP_COLORS.rlbuf); addLabel(s, x+24, y+60, 'RL Buffer'); rect(x+16, y+74, 188, 26, DP_COLORS.net); addLabel(s, x+24, y+92, 'Network'); addLabel(s, x, y-12, `GPU ${i}`); return { x, y }; });
+		const replicas = [x0, x1, x2, x3].map((x, i) => { rect(x, y, gpuW, gpuH, '#ffffff'); rect(x+16, y+10, 188, 28, DP_COLORS.sim); addCenteredLabel(s, x+16+188/2, y+10+28/2, 'Environment'); rect(x+16, y+44, 188, 26, DP_COLORS.rlbuf); addCenteredLabel(s, x+16+188/2, y+44+26/2, 'RL Buffer'); rect(x+16, y+74, 188, 26, DP_COLORS.net); addCenteredLabel(s, x+16+188/2, y+74+26/2, 'Network'); addLabel(s, x, y-12, `GPU ${i}`); return { x, y }; });
 		const centers = replicas.map((r) => ({ x: r.x + 16 + 188/2, y: r.y + 74 + 26/2 }));
 		const busY = y + gpuH + 24; const busX1 = Math.min(...centers.map(c => c.x)); const busX2 = Math.max(...centers.map(c => c.x));
 		createSvgEl(s, 'line', { x1: busX1, y1: busY, x2: busX2, y2: busY, stroke: DP_COLORS.allreduce, 'stroke-width': 3, 'stroke-opacity': 0.5 });
@@ -98,19 +100,23 @@
 	}
 
 	function drawDisaggregated(svg, token, animate) {
-		const s = svg; s.innerHTML=''; const pad = 40; const gpuW = 220; const gpuH = 110; const gap = 24; const yRow = 200;
+		const s = svg; s.innerHTML=''; const pad = 40; const gpuW = 220; const gpuH = 110; const gap = 24; const yRow = 160;
 		function rect(x, y, w, h, fill) { return createSvgEl(s, 'rect', { x:x, y:y, width:w, height:h, rx:10, fill: fill, stroke: DP_COLORS.border, 'stroke-width': 1 }); }
 		const x0 = pad, x1 = x0 + gpuW + gap, x2 = x1 + gpuW + gap, x3 = x2 + gpuW + gap;
-		[x0, x1, x2].forEach((x, i) => { rect(x, yRow, gpuW, gpuH, '#ffffff'); rect(x+16, yRow+10, 188, 90, DP_COLORS.sim); addLabel(s, x+24, yRow+58, 'Environment'); addLabel(s, x, yRow-12, `Sim GPU ${i}`); });
-		rect(x3, yRow, gpuW, gpuH, '#ffffff'); const net = rect(x3+16, yRow+16, 188, 30, DP_COLORS.net); addLabel(s, x3+24, yRow+36, 'Network'); const buf = rect(x3+16, yRow+60, 188, 30, DP_COLORS.rlbuf); addLabel(s, x3+24, yRow+80, 'RL Buffer'); addLabel(s, x3, yRow-12, 'RL GPU');
-		const centersEnv = [x0, x1, x2].map((x) => ({ x: x + 16 + 188/2, y: yRow + 10 + 90/2 })); const centerNet = { x: x3 + 16 + 188/2, y: yRow + 16 + 30/2 };
+		[x0, x1, x2].forEach((x, i) => { rect(x, yRow, gpuW, gpuH, '#ffffff'); rect(x+16, yRow+10, 188, 90, DP_COLORS.sim); addCenteredLabel(s, x+16+188/2, yRow+10+90/2, 'Environment'); addLabel(s, x, yRow-12, `Sim GPU ${i}`); });
+		rect(x3, yRow, gpuW, gpuH, '#ffffff'); const NET_H = 36, BUF_H = 36; const net = rect(x3+16, yRow+16, 188, NET_H, DP_COLORS.net); addCenteredLabel(s, x3+16+188/2, yRow+16+NET_H/2, 'Network'); const buf = rect(x3+16, yRow+60, 188, BUF_H, DP_COLORS.rlbuf); addCenteredLabel(s, x3+16+188/2, yRow+60+BUF_H/2, 'RL Buffer'); addLabel(s, x3, yRow-12, 'RL GPU');
+		const centersEnv = [x0, x1, x2].map((x) => ({ x: x + 16 + 188/2, y: yRow + 10 + 90/2 })); const centerNet = { x: x3 + 16 + 188/2, y: yRow + 16 + NET_H/2 };
 		const tapsX = [...centersEnv.map(c => c.x), centerNet.x]; const busY = yRow + gpuH + 24; const busX1 = Math.min(...tapsX); const busX2 = Math.max(...tapsX);
 		createSvgEl(s, 'line', { x1: busX1, y1: busY, x2: busX2, y2: busY, stroke: DP_COLORS.allreduce, 'stroke-width': 3, 'stroke-opacity': 0.5 });
 		// Vertical taps that touch the bottom edges of the blocks
 		const envBottomY = yRow + 10 + 90; // bottom edge of Environment blocks
-		const netBottomY = yRow + 16 + 30; // bottom edge of Network block
+		const netBottomY = yRow + 16 + NET_H; // bottom edge of Network block
+		const rlTopY = yRow + 60; // top edge of RL Buffer
+		const rlBottomY = yRow + 60 + BUF_H; // bottom edge of RL Buffer
 		centersEnv.forEach((c) => { createSvgEl(s, 'line', { x1: c.x, y1: envBottomY, x2: c.x, y2: busY, stroke: DP_COLORS.allreduce, 'stroke-width': 2, 'stroke-opacity': 0.35 }); });
-		createSvgEl(s, 'line', { x1: centerNet.x, y1: netBottomY, x2: centerNet.x, y2: busY, stroke: DP_COLORS.allreduce, 'stroke-width': 2, 'stroke-opacity': 0.35 });
+		// Split RL GPU tap into two segments to avoid crossing the RL Buffer block
+		createSvgEl(s, 'line', { x1: centerNet.x, y1: netBottomY, x2: centerNet.x, y2: rlTopY, stroke: DP_COLORS.allreduce, 'stroke-width': 2, 'stroke-opacity': 0.35 });
+		createSvgEl(s, 'line', { x1: centerNet.x, y1: rlBottomY, x2: centerNet.x, y2: busY, stroke: DP_COLORS.allreduce, 'stroke-width': 2, 'stroke-opacity': 0.35 });
 		if (!animate) return;
 		function animateMove(dot, from, to, dur, cb) { const start = performance.now(); function step(now) { if (token !== METHOD_TOKEN) { dot.remove(); return; } const t = Math.min(1, (now - start) / dur); dot.setAttribute('cx', from.x + (to.x - from.x) * t); dot.setAttribute('cy', from.y + (to.y - from.y) * t); if (t < 1) requestAnimationFrame(step); else cb && cb(); } requestAnimationFrame(step); }
 		function animatePath(dot, p1, p3, durV, durH, done) { animateMove(dot, p1, { x: p1.x, y: busY }, durV, () => animateMove(dot, { x: p1.x, y: busY }, { x: p3.x, y: busY }, durH, () => animateMove(dot, { x: p3.x, y: busY }, p3, durV, done))); }
