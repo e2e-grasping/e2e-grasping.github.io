@@ -101,5 +101,5 @@ pre.code { background: var(--code); border: 1px solid var(--border); border-radi
 .result-chart { width: 100%; height: auto; display: block; }
 
 /* Plot size tweak: make the bottom-left chart a bit smaller */
-#chart-sim-depth-vs-state { width: 80%; max-width: 80%; margin: 0 auto; }
+#chart-sim-depth-vs-state { width: 100%; max-width: 100%; height: auto; object-fit: contain; }
 @media (max-width: 600px) { #chart-sim-depth-vs-state { width: 100%; max-width: 100%; } } 
