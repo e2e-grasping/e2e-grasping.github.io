@@ -62,6 +62,8 @@
 
 // 	function drawDataParallel(svg, token, animate) {
 // 		const s = svg; s.innerHTML = '';
+// 		// Title (left-aligned, darker)
+// 		{ const t = createSvgEl(s, 'text', { x: 40, y: 26, fill: '#0b1220', 'font-size': '14', 'font-family': 'Inter, system-ui', 'text-anchor': 'start' }); t.textContent = 'Data Parallelism'; }
 // 		const pad = 40; const gpuW = 220, gpuH = 110, gap = 24; const y = 100;
 // 		function rect(x, y, w, h, fill) { return createSvgEl(s, 'rect', { x:x, y:y, width:w, height:h, rx:10, fill: fill, stroke: DP_COLORS.border, 'stroke-width': 1 }); }
 // 		const x0 = pad, x1 = x0 + gpuW + gap, x2 = x1 + gpuW + gap, x3 = x2 + gpuW + gap;
@@ -102,7 +104,10 @@
 // 	}
 
 // 	function drawDisaggregated(svg, token, animate) {
-// 		const s = svg; s.innerHTML=''; const pad = 40; const gpuW = 220; const gpuH = 110; const gap = 24; const yRow = 120;
+// 		const s = svg; s.innerHTML='';
+// 		// Title (left-aligned, darker)
+// 		{ const t = createSvgEl(s, 'text', { x: 40, y: 26, fill: '#0b1220', 'font-size': '14', 'font-family': 'Inter, system-ui', 'text-anchor': 'start' }); t.textContent = 'Disaggregated Simulation and RL'; }
+// 		const pad = 40; const gpuW = 220; const gpuH = 110; const gap = 24; const yRow = 120;
 // 		function rect(x, y, w, h, fill) { return createSvgEl(s, 'rect', { x:x, y:y, width:w, height:h, rx:10, fill: fill, stroke: DP_COLORS.border, 'stroke-width': 1 }); }
 // 		const x0 = pad, x1 = x0 + gpuW + gap, x2 = x1 + gpuW + gap, x3 = x2 + gpuW + gap;
 // 		[x0, x1, x2].forEach((x, i) => { rect(x, yRow, gpuW, gpuH, '#ffffff'); rect(x+16, yRow+10, 188, 90, DP_COLORS.sim); addCenteredLabel(s, x+16+188/2, yRow+10+90/2, 'Environment'); addLabel(s, x, yRow-12, `Sim GPU ${i}`); });
@@ -511,6 +516,8 @@
 
 	function drawDataParallel(svg, token, animate) {
 		const s = svg; s.innerHTML = '';
+		// Title (left-aligned, darker)
+		{ const t = createSvgEl(s, 'text', { x: 40, y: 26, fill: '#0b1220', 'font-size': '14', 'font-family': 'Inter, system-ui', 'text-anchor': 'start' }); t.textContent = 'Data Parallelism'; }
 		const pad = 40; const gpuW = 220, gpuH = 110, gap = 24; const y = 100;
 		function rect(x, y, w, h, fill) { return createSvgEl(s, 'rect', { x:x, y:y, width:w, height:h, rx:10, fill: fill, stroke: DP_COLORS.border, 'stroke-width': 1 }); }
 		const x0 = pad, x1 = x0 + gpuW + gap, x2 = x1 + gpuW + gap, x3 = x2 + gpuW + gap;
@@ -551,7 +558,10 @@
 	}
 
 	function drawDisaggregated(svg, token, animate) {
-		const s = svg; s.innerHTML=''; const pad = 40; const gpuW = 220; const gpuH = 110; const gap = 24; const yRow = 120;
+		const s = svg; s.innerHTML='';
+		// Title (left-aligned, darker)
+		{ const t = createSvgEl(s, 'text', { x: 40, y: 26, fill: '#0b1220', 'font-size': '14', 'font-family': 'Inter, system-ui', 'text-anchor': 'start' }); t.textContent = 'Disaggregated Simulation and RL'; }
+		const pad = 40; const gpuW = 220; const gpuH = 110; const gap = 24; const yRow = 120;
 		function rect(x, y, w, h, fill) { return createSvgEl(s, 'rect', { x:x, y:y, width:w, height:h, rx:10, fill: fill, stroke: DP_COLORS.border, 'stroke-width': 1 }); }
 		const x0 = pad, x1 = x0 + gpuW + gap, x2 = x1 + gpuW + gap, x3 = x2 + gpuW + gap;
 		[x0, x1, x2].forEach((x, i) => { rect(x, yRow, gpuW, gpuH, '#ffffff'); rect(x+16, yRow+10, 188, 90, DP_COLORS.sim); addCenteredLabel(s, x+16+188/2, yRow+10+90/2, 'Environment'); addLabel(s, x, yRow-12, `Sim GPU ${i}`); });

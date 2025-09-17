@@ -21,9 +21,9 @@
 			</ul>
 			<!-- <p class="affiliations">Affiliations • Institution • Lab</p> -->
 			<div class="links">
-				<a class="btn" href="https://e2e-grasping.github.io/" target="_blank" rel="noopener">Project Page</a>
 				<a class="btn" href="#videos">Videos</a>
 				<a class="btn" href="#method">Method</a>
+				<a class="btn" href="#results">Results</a>
 			</div>
 		</div>
 	</header>
@@ -60,15 +60,23 @@
 
 		<section id="method" class="section">
 			<div class="container">
-				<h2>Method: Disaggregated Simulation vs Data Parallelism</h2>
-				<p class="muted">Animated diagrams illustrating the data flow across 4 GPUs for both approaches (horizon length = 3).</p>
-				<div class="method-controls">
-					<button class="btn" data-mode="data-parallel">Data Parallelism</button>
-					<button class="btn" data-mode="disaggregated">Disaggregated Simulation</button>
+				<h2>Method</h2>
+				<div class="method-subsection">
+					<h3>End-to-end RL</h3>
+					<p class="muted">Vision-based policies are incredibly important for real-world manipulation. However, training them directly from RL has historically been challenging due to the high sample complexity of image space. This has led to two-stage methods gaining prominence whereby a state-based teacher policy is trained with RL and then distilled into a vision-based student policy. While this has led to training successful policies, they fundamentally do not learn vision-aware behaviors. For example, imagine a robot arm trying to grasp an object. Suppose the arm is currently occluding said object. The teacher policy, which has access to the groundtruth object position, will simply just pick it up. However, the student policy may struggle to recreate this behavior as it has not learned to move the arm out of the way in order to see the object. In such cases, the student is trying to mimic state-based behaviors while only having access to vision information which causes it to act sub-optimally with respect to its inputs. Therefore, end-to-end training, where the RL policy learns directly from images, will lead to policy behaviors that lend themselves better to their sensory modalities.
+                        However, RGB end-to-end RL is much slower than depth-based RL as the rendering process for accurate light transport simulation is far more time consuming. Thus, a suitable middle ground that meets the requirements above while also being able to run on a reasonable hardware budget is to train a depth based policy with RL, and distill this into a stereo RGB-based policy in order to deploy in the real world.</p>
 				</div>
-				<div class="method-diagrams">
-					<svg class="method-svg" id="svg-data-parallel" viewBox="0 0 1000 300" aria-label="Data Parallelism diagram"></svg>
-					<svg class="method-svg" id="svg-disaggregated" viewBox="0 0 1000 300" aria-label="Disaggregated Simulation diagram"></svg>
+				<div class="method-subsection">
+					<h3>Disaggregated Simulation vs Data Parallelism</h3>
+					<p class="muted">When training vision-based RL, it's important to have a sufficiently large batch size to get a reliable learning signal from PPO. The standard method of scaling up is data parallelism. Our new method, disaggregated simulation and RL, is able to double the number of environments with the same hardware. The diagrams below illustrate the data flow across 4 GPUs for both data parallelism and disaggregated simulation with horizon length = 3. Click the buttons to view the animation.</p>
+					<div class="method-controls">
+						<button class="btn" data-mode="data-parallel">Data Parallelism</button>
+						<button class="btn" data-mode="disaggregated">Disaggregated Simulation</button>
+					</div>
+					<div class="method-diagrams">
+						<svg class="method-svg" id="svg-data-parallel" viewBox="0 0 1000 300" aria-label="Data Parallelism diagram"></svg>
+						<svg class="method-svg" id="svg-disaggregated" viewBox="0 0 1000 300" aria-label="Disaggregated Simulation diagram"></svg>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -76,7 +84,7 @@
 		<section id="results" class="section section-alt">
 			<div class="container">
 				<h2>Results</h2>
-				<p class="muted">We evaluate scaling capacity and policy quality in both simulation and the real world.</p>
+				<p class="muted">We evaluate scaling capacity and policy performance in both simulation and the real world.</p>
 
 				<div class="results-grid">
 					<article class="result-card">
@@ -106,14 +114,15 @@
 									</tr>
 								</tbody>
 							</table>
-							<p class="footnote muted">4×“sim + RL”; 3×simulators + 1×learner.</p>
+							<p class="footnote muted">Data Parallel: 4× sim+RL GPUs.</p>
+                            <p class="footnote muted">Disaggregated Simulation: 3×simulators + 1×learner GPUs.</p>
 						</div>
 					</article>
 
 					<article class="result-card">
 						<header class="result-head">
 							<h3>Simulation progress and success</h3>
-							<p class="muted">DP vs Disaggregated at 160×120 and 320×240 (5 seeds avg).</p>
+							<p class="muted">Data Parallel (DP) vs Disaggregated Simulation (Disagg)at 160×120 and 320×240 (5 seeds avg) for e2e depth RL.</p>
 						</header>
 						<div class="result-body">
 							<table class="table">
@@ -161,14 +170,14 @@
 					<!-- Inserted plot card as third item (bottom-left) -->
 					<article class="result-card">
 						<header class="result-head">
-							<h3>Depth vs State teachers (simulation)</h3>
-							<p class="muted">Distillation performance between depth and state teachers.</p>
+							<h3>Depth vs State Teachers Distillation</h3>
+							<p class="muted">Simulation performance between distilled stereo RGB policies.</p>
 						</header>
 						<div class="result-body">
 							<img id="chart-sim-depth-vs-state"
 								class="result-chart"
 								alt="Depth vs State teachers chart"
-								data-src="assets/img/sim_depth_vs_state_stretch.png" />
+								data-src="assets/img/sim_depth_vs_state_new.png" />
 						</div>
 					</article>
 
@@ -204,7 +213,6 @@
 									</tr>
 								</tbody>
 							</table>
-							<p class="footnote muted">SR = success rate.</p>
 						</div>
 					</article>
 				</div>
