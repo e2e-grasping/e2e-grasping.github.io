@@ -17,6 +17,7 @@ A minimal academic website template for the paper "Scaling End-to-End Grasping w
   - Replace SVG thumbs with your own images in `assets/img/`
 - Citation: edit the BibTeX in the `#citation` section
 
+
 ## Local preview
 Open `index.html` directly, or serve locally:
 
