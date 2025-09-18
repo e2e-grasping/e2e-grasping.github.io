@@ -21,7 +21,7 @@ A minimal academic website template for the paper "Scaling End-to-End Grasping w
 Open `index.html` directly, or serve locally:
 
 ```bash
-cd /Users/ritviks/git/e2e-grasping.github.io
+cd /path/to/e2e-grasping.github.io
 python3 -m http.server 4000
 ```
 
