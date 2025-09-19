@@ -76,6 +76,11 @@ a { color: inherit; text-decoration: none; }
 /* Abstract */
 #abstract h2, #videos h2, #method h2, #citation h2 { font-size: 24px; margin: 0 0 16px; }
 #abstract p { color: var(--muted); font-size: 16px; }
+/* Subheading under abstract */
+.subheading { font-size: 18px; margin: 10px 0 6px; font-weight: 600; color: var(--text); }
+/* Contributions under abstract */
+.contribs { margin: 12px 0 0; padding-left: 18px; color: var(--text); }
+.contribs li { margin: 4px 0; }
 
 /* Gallery */
 .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }

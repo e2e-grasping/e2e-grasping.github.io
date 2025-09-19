@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>End-to-End Grasping with Disaggregated Simulation</title>
-	<meta name="description" content="Scaling image-based end-to-end learning for dexterous grasping with disaggregated simulation and PPO.">
+	<title>End-to-end RL Improves Dexterous Grasping Policies</title>
+	<meta name="description" content="Scaling End-to-End Vision-based RL">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,8 +14,8 @@
 <body>
 	<header class="site-header">
 		<div class="container">
-			<h1 class="site-title">Scaling End-to-End Grasping</h1>
-			<p class="site-subtitle">Disaggregated Simulation for Vision-based RL</p>
+			<h1 class="site-title">End-to-end RL Improves Dexterous Grasping Policies</h1>
+			<p class="site-subtitle">Scaling End-to-End Vision-based RL</p>
 			<div class="authors">
 				<div class="author-list">
 					Under Submission
@@ -46,6 +46,12 @@
 				<p>
 					This work explores techniques to scale up image-based end-to-end learning for dexterous grasping with an arm + hand system. Unlike state-based RL, vision-based RL is much more memory inefficient, resulting in relatively low batch sizes, which is not amenable for algorithms like PPO. Nevertheless, it is still an attractive method as unlike the more commonly used techniques which distill state-based policies into vision networks, end-to-end RL can allow for emergent active vision behaviors. We identify a key bottleneck in training these policies is the way most existing simulators scale to multiple GPUs using traditional data parallelism techniques. We propose a new method where we disaggregate the simulator and RL (both training and experience buffers) onto separate GPUs. On a node with four GPUs, we have the simulator running on three of them, and PPO running on the fourth. We are able to show that with the same number of GPUs, we can double the number of existing environments compared to the previous baseline of standard data parallelism. This allows us to train vision-based environments, end-to-end with depth, which were previously performing far worse with the baseline. We train and distill both depth and state-based policies into stereo RGB networks and show that depth distillation leads to better results, both in simulation and reality. This improvement is likely due to the observability gap between state and vision policies which does not exist when distilling depth policies into stereo RGB. We further show that the increased batch size brought about by disaggregated simulation also improves real world performance. When deploying in the real world, we improve upon the previous state-of-the-art vision-based results using our end-to-end policies. To our knowledge, this is the first work that has demonstrated end-to-end RL for dexterous grasping with multifingered hands. 
 				</p>
+				<h3 class="subheading">Contributions</h3>
+				<ul class="contribs">
+					<li>First sim-to-real with multifingered hands using end-to-end RL training.</li>
+					<li>Improved simulation infrastructure to scale up vision-based training.</li>
+					<li>State of the art results for vision-based grasping.</li>
+				</ul>
 			</div>
 		</section>
 
