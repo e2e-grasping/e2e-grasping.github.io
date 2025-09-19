@@ -60,6 +60,102 @@
 		requestAnimationFrame(step);
 	}
 
+	/* Hero video controls */
+	function setupHeroVideo() {
+		const hero = document.querySelector('.hero-video');
+		if (!hero) return;
+		const video = hero.querySelector('video');
+		const playBtn = hero.querySelector('.hero-play');
+		const seek = hero.querySelector('.hero-seek');
+		const tcur = hero.querySelector('.tcur');
+		const ttotal = hero.querySelector('.ttotal');
+		if (!video || !playBtn || !seek || !tcur || !ttotal) return;
+
+		function setPausedUI(paused) {
+			playBtn.innerHTML = '';
+			const span = document.createElement('span');
+			span.className = paused ? 'icon icon-play' : 'icon icon-pause';
+			playBtn.appendChild(span);
+			playBtn.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+			playBtn.setAttribute('title', paused ? 'Play' : 'Pause');
+		}
+
+		function togglePlayback() { if (video.paused) video.play(); else video.pause(); }
+
+		function formatTime(sec) {
+			if (!Number.isFinite(sec)) return '0:00';
+			const m = Math.floor(sec / 60);
+			const s = Math.floor(sec % 60);
+			return m + ':' + String(s).padStart(2, '0');
+		}
+
+		const tryAutoplay = () => { const p = video.play(); if (p && typeof p.then === 'function') p.catch(() => {}); };
+		if (video.readyState >= 2) tryAutoplay(); else video.addEventListener('canplay', tryAutoplay, { once: true });
+
+		setPausedUI(false);
+		playBtn.addEventListener('click', togglePlayback);
+		video.addEventListener('click', togglePlayback);
+
+		video.addEventListener('loadedmetadata', () => { ttotal.textContent = formatTime(video.duration); });
+		video.addEventListener('timeupdate', () => {
+			if (video.duration) {
+				seek.value = String((video.currentTime / video.duration) * 100);
+				tcur.textContent = formatTime(video.currentTime);
+			}
+		});
+		seek.addEventListener('input', () => { if (!video.duration) return; video.currentTime = (Number(seek.value) / 100) * video.duration; });
+
+		video.addEventListener('play', () => setPausedUI(false));
+		video.addEventListener('pause', () => setPausedUI(true));
+	}
+
+	/* Inline videos */
+	function setupInlineVideos() {
+		const cards = document.querySelectorAll('.video-card');
+		cards.forEach((card) => {
+			const video = card.querySelector('video');
+			const playBtn = card.querySelector('.v-play');
+			const seek = card.querySelector('.v-seek');
+			const tcur = card.querySelector('.v-cur');
+			const ttotal = card.querySelector('.v-total');
+			if (!video || !playBtn || !seek || !tcur || !ttotal) return;
+
+			function setPausedUI(paused) {
+				playBtn.innerHTML = '';
+				const span = document.createElement('span');
+				span.className = paused ? 'icon icon-play' : 'icon icon-pause';
+				playBtn.appendChild(span);
+				playBtn.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+				playBtn.setAttribute('title', paused ? 'Play' : 'Pause');
+			}
+
+			function formatTime(sec) {
+				if (!Number.isFinite(sec)) return '0:00';
+				const m = Math.floor(sec / 60);
+				const s = Math.floor(sec % 60);
+				return m + ':' + String(s).padStart(2, '0');
+			}
+
+			setPausedUI(video.autoplay ? false : true);
+
+			video.addEventListener('loadedmetadata', () => { ttotal.textContent = formatTime(video.duration); });
+			const tryAutoplay = () => { const p = video.play(); if (p && typeof p.then === 'function') p.catch(() => {}); };
+			if (video.autoplay) { if (video.readyState >= 2) tryAutoplay(); else video.addEventListener('canplay', tryAutoplay, { once: true }); }
+			video.addEventListener('timeupdate', () => {
+				if (video.duration) {
+					seek.value = String((video.currentTime / video.duration) * 100);
+					tcur.textContent = formatTime(video.currentTime);
+				}
+			});
+			seek.addEventListener('input', () => { if (!video.duration) return; video.currentTime = (Number(seek.value) / 100) * video.duration; });
+
+			playBtn.addEventListener('click', () => { if (video.paused) video.play(); else video.pause(); });
+			video.addEventListener('click', () => { if (video.paused) video.play(); else video.pause(); });
+			video.addEventListener('play', () => setPausedUI(false));
+			video.addEventListener('pause', () => setPausedUI(true));
+		});
+	}
+
 	function drawDataParallel(svg, token, animate) {
 		const s = svg; s.innerHTML = '';
 		// Title (left-aligned, darker)
@@ -635,9 +731,13 @@
 		document.addEventListener('DOMContentLoaded', () => { 
 			setupMethod(); 
 			setupResultsChart(); 
+			setupHeroVideo();
+			setupInlineVideos();
 		}); 
 	} else { 
 		setupMethod(); 
 		setupResultsChart(); 
+		setupHeroVideo();
+		setupInlineVideos();
 	}
 })();

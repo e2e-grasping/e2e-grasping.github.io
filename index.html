@@ -16,14 +16,25 @@
 		<div class="container">
 			<h1 class="site-title">Scaling End-to-End Grasping</h1>
 			<p class="site-subtitle">Disaggregated Simulation for Vision-based RL</p>
-			<ul class="authors">
-				<li>Under Submission</li>
-			</ul>
-			<!-- <p class="affiliations">Affiliations • Institution • Lab</p> -->
+			<div class="authors">
+				<div class="author-list">
+					Under Submission
+				</div>
+			</div>
 			<div class="links">
 				<a class="btn" href="#videos">Videos</a>
 				<a class="btn" href="#method">Method</a>
 				<a class="btn" href="#results">Results</a>
+			</div>
+			<div class="hero-video">
+				<video src="assets/videos/video.mp4" playsinline muted autoplay loop preload="metadata" aria-label="Project overview video"></video>
+				<div class="hero-controls" role="group" aria-label="Video controls">
+					<button class="hero-btn hero-play" aria-label="Pause video" title="Pause"><span class="icon icon-pause" aria-hidden="true"></span></button>
+					<div class="hero-progress">
+						<input class="hero-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+					</div>
+					<div class="hero-time"><span class="tcur">0:00</span> / <span class="ttotal">0:00</span></div>
+				</div>
 			</div>
 		</div>
 	</header>
@@ -33,7 +44,7 @@
 			<div class="container narrow">
 				<h2>Abstract</h2>
 				<p>
-					This work explores techniques to scale up image-based end-to-end learning for dexterous grasping with an arm + hand system. Unlike state-based RL, vision-based RL is much more memory inefficient, resulting in relatively low batch sizes, which is not amenable for algorithms like PPO. Nevertheless, it is still an attractive method as unlike the more commonly used techniques which distill state-based policies into vision networks, end-to-end RL can allow for emergent active vision behaviors. We identify a key bottleneck in training these policies is the way most existing simulators scale to multiple GPUs using traditional data parallelism techniques. We propose a new method where we disaggregate the simulator and RL (both training and experience buffers) onto separate GPUs. On a node with four GPUs, we have the simulator running on three of them, and PPO running on the fourth. We are able to show that with the same number of GPUs, we can double the number of existing environments compared to the previous baseline of standard data parallelism. This allows us to train vision-based environments, end-to-end with depth, which were previously performing far worse with the baseline. We train and distill both depth and state-based policies into stereo RGB networks and show that depth distillation leads to better results, both in simulation and reality. This improvement is likely due to the observability gap between state and vision policies which does not exist when distilling depth policies into stereo RGB. We further show that the increased batch size brought about by disaggregated simulation also improves real world performance. When deploying in the real world, we improve upon the previous state-of-the-art vision-based results using our end-to-end policies. To our knowledge, this is the first time that end-to-end RL has been used for dexterous grasping with multifingered hands.
+					This work explores techniques to scale up image-based end-to-end learning for dexterous grasping with an arm + hand system. Unlike state-based RL, vision-based RL is much more memory inefficient, resulting in relatively low batch sizes, which is not amenable for algorithms like PPO. Nevertheless, it is still an attractive method as unlike the more commonly used techniques which distill state-based policies into vision networks, end-to-end RL can allow for emergent active vision behaviors. We identify a key bottleneck in training these policies is the way most existing simulators scale to multiple GPUs using traditional data parallelism techniques. We propose a new method where we disaggregate the simulator and RL (both training and experience buffers) onto separate GPUs. On a node with four GPUs, we have the simulator running on three of them, and PPO running on the fourth. We are able to show that with the same number of GPUs, we can double the number of existing environments compared to the previous baseline of standard data parallelism. This allows us to train vision-based environments, end-to-end with depth, which were previously performing far worse with the baseline. We train and distill both depth and state-based policies into stereo RGB networks and show that depth distillation leads to better results, both in simulation and reality. This improvement is likely due to the observability gap between state and vision policies which does not exist when distilling depth policies into stereo RGB. We further show that the increased batch size brought about by disaggregated simulation also improves real world performance. When deploying in the real world, we improve upon the previous state-of-the-art vision-based results using our end-to-end policies. 
 				</p>
 			</div>
 		</section>
@@ -42,18 +53,30 @@
 			<div class="container">
 				<h2>Videos</h2>
 				<div class="gallery">
-					<a class="card" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-video-type="youtube" aria-label="Demo 1">
-						<img src="assets/img/thumb-1.svg" alt="Video thumbnail 1">
-						<div class="card-caption">Simulation Scaling Demo</div>
-					</a>
-					<a class="card" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-video-type="youtube" aria-label="Demo 2">
-						<img src="assets/img/thumb-2.svg" alt="Video thumbnail 2">
-						<div class="card-caption">Depth Distillation Results</div>
-					</a>
-					<a class="card" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-video-type="youtube" aria-label="Demo 3">
-						<img src="assets/img/thumb-3.svg" alt="Video thumbnail 3">
-						<div class="card-caption">Real-world Grasping</div>
-					</a>
+					<div class="card video-card" aria-label="Video 1">
+						<video src="assets/videos/video_1.mp4" playsinline muted autoplay loop preload="metadata"></video>
+						<div class="v-controls" role="group" aria-label="Inline video controls">
+							<button class="v-btn v-play" aria-label="Pause video" title="Pause"><span class="icon icon-pause" aria-hidden="true"></span></button>
+							<div class="v-progress"><input class="v-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek"></div>
+							<div class="v-time"><span class="v-cur">0:00</span> / <span class="v-total">0:00</span></div>
+						</div>
+					</div>
+					<div class="card video-card" aria-label="Video 2">
+						<video src="assets/videos/video_2.mp4" playsinline muted autoplay loop preload="metadata"></video>
+						<div class="v-controls" role="group" aria-label="Inline video controls">
+							<button class="v-btn v-play" aria-label="Pause video" title="Pause"><span class="icon icon-pause" aria-hidden="true"></span></button>
+							<div class="v-progress"><input class="v-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek"></div>
+							<div class="v-time"><span class="v-cur">0:00</span> / <span class="v-total">0:00</span></div>
+						</div>
+					</div>
+					<div class="card video-card" aria-label="Video 3">
+						<video src="assets/videos/video_3.mp4" playsinline muted autoplay loop preload="metadata"></video>
+						<div class="v-controls" role="group" aria-label="Inline video controls">
+							<button class="v-btn v-play" aria-label="Pause video" title="Pause"><span class="icon icon-pause" aria-hidden="true"></span></button>
+							<div class="v-progress"><input class="v-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek"></div>
+							<div class="v-time"><span class="v-cur">0:00</span> / <span class="v-total">0:00</span></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -63,7 +86,7 @@
 				<h2>Method</h2>
 				<div class="method-subsection">
 					<h3>End-to-end RL</h3>
-					<p class="muted">Vision-based policies are incredibly important for real-world manipulation. However, training them directly from RL has historically been challenging due to the high sample complexity of image space. This has led to two-stage methods gaining prominence whereby a state-based teacher policy is trained with RL and then distilled into a vision-based student policy. While this has led to training successful policies, they fundamentally do not learn vision-aware behaviors. For example, imagine a robot arm trying to grasp an object. Suppose the arm is currently occluding said object. The teacher policy, which has access to the groundtruth object position, will simply just pick it up. However, the student policy may struggle to recreate this behavior as it has not learned to move the arm out of the way in order to see the object. In such cases, the student is trying to mimic state-based behaviors while only having access to vision information which causes it to act sub-optimally with respect to its inputs. Therefore, end-to-end training, where the RL policy learns directly from images, will lead to policy behaviors that lend themselves better to their sensory modalities.
+					<p class="muted">Vision-based policies are incredibly important for real-world manipulation. However, training them directly from RL has historically been challenging due to the high sample complexity of image space. This has led to two-stage methods gaining prominence whereby a state-based teacher policy is trained with RL and then distilled into a vision-based student policy. While this has led to training successful policies, they fundamentally do not learn vision-aware behaviors. For example, imagine a robot arm trying to grasp an object. Suppose the arm is currently occluding said object. The teacher policy, which has access to the groundtruth object position, will simply just pick it up. However, the student policy may struggle to recreate this behavior as it has not learned to move the arm out of the way in order to see the object. In such cases, the student is trying to mimic state-based behaviors while only having access to vision information which causes it to act sub-optimally with respect to its inputs. Therefore, end-to-end training, where the RL policy learns directly from images, will lead to policy behaviors that lend themselves better to their sensory modalities. To our knowledge, this is the first time that end-to-end RL has been used for dexterous grasping with multifingered hands.
                         However, RGB end-to-end RL is much slower than depth-based RL as the rendering process for accurate light transport simulation is far more time consuming. Thus, a suitable middle ground that meets the requirements above while also being able to run on a reasonable hardware budget is to train a depth based policy with RL, and distill this into a stereo RGB-based policy in order to deploy in the real world.</p>
 				</div>
 				<div class="method-subsection">
